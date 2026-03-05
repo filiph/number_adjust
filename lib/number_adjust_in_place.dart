@@ -24,9 +24,14 @@ List<String> numberAdjustInPlace(
   final matches = regex.allMatches(line);
 
   for (final match in matches) {
-    if (column >= match.start && column <= match.end) {
+    if (column >= match.start && column < match.end) {
       final numberString = line.substring(match.start, match.end);
-      final adjustedNumber = numberAdjust(numberString, direction: direction);
+      final relativePosition = column - match.start;
+      final adjustedNumber = numberAdjust(
+        numberString,
+        position: relativePosition,
+        direction: direction,
+      );
 
       final newLine = line.replaceRange(match.start, match.end, adjustedNumber);
       final newLines = List<String>.from(lines);

@@ -25,7 +25,7 @@ void main() {
 
     test('successfully adjusts a number in-place', () async {
       final inputFile = File(p.join(tempDir.path, 'input.txt'));
-      inputFile.writeAsStringSync('Value: 100\n');
+      inputFile.writeAsStringSync('100\n');
 
       final result = await runCli([
         '--input',
@@ -33,19 +33,19 @@ void main() {
         '--row',
         '1',
         '--col',
-        '8',
+        '1', // Digit '1' in '100'
         '--direction',
         'up',
       ]);
 
       expect(result.exitCode, 0, reason: result.stderr.toString());
-      expect(inputFile.readAsStringSync(), 'Value: 110\n');
+      expect(inputFile.readAsStringSync(), '200\n');
     });
 
     test('successfully adjusts a number to a different output file', () async {
       final inputFile = File(p.join(tempDir.path, 'input.txt'));
       final outputFile = File(p.join(tempDir.path, 'output.txt'));
-      inputFile.writeAsStringSync('Value: 100\n');
+      inputFile.writeAsStringSync('100\n');
 
       final result = await runCli([
         '--input',
@@ -55,14 +55,14 @@ void main() {
         '--row',
         '1',
         '--col',
-        '8',
+        '3', // Digit '0' (last) in '100'
         '--direction',
         'up',
       ]);
 
       expect(result.exitCode, 0, reason: result.stderr.toString());
-      expect(inputFile.readAsStringSync(), 'Value: 100\n');
-      expect(outputFile.readAsStringSync(), 'Value: 110\n');
+      expect(inputFile.readAsStringSync(), '100\n');
+      expect(outputFile.readAsStringSync(), '101\n');
     });
 
     test('fails with error message when no number is found', () async {

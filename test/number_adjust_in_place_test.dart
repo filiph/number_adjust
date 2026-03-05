@@ -9,21 +9,21 @@ void main() {
       final result = numberAdjustInPlace(
         lines,
         row: 0,
-        column: 15,
+        column: 17, // Digit '4' in '123.45'
         direction: AdjustDirection.up,
       );
-      expect(result[0], 'The value is 123.46 volts');
+      expect(result[0], 'The value is 123.55 volts');
     });
 
-    test('adjusts number when cursor is at the start', () {
+    test('adjusts number when cursor is at the digit', () {
       final lines = ['Value: 100'];
       final result = numberAdjustInPlace(
         lines,
         row: 0,
-        column: 7,
+        column: 7, // Digit '1' in '100'
         direction: AdjustDirection.up,
       );
-      expect(result[0], 'Value: 110');
+      expect(result[0], 'Value: 200');
     });
 
     test('adjusts number when cursor is at the end', () {
@@ -31,7 +31,7 @@ void main() {
       final result = numberAdjustInPlace(
         lines,
         row: 0,
-        column: 9,
+        column: 8, // Digit '0' in '50'
         direction: AdjustDirection.down,
       );
       expect(result[0], 'Count: 49');
@@ -42,21 +42,10 @@ void main() {
       final result = numberAdjustInPlace(
         lines,
         row: 0,
-        column: 8, // pointing at the digits part of -100
+        column: 9, // Digit '1' in '-100' (idx 8 is '-', idx 9 is '1')
         direction: AdjustDirection.up,
       );
-      expect(result[0], 'Offset: -90');
-    });
-
-    test('handles negative sign explicitly', () {
-      final lines = ['Offset: -100'];
-      final result = numberAdjustInPlace(
-        lines,
-        row: 0,
-        column: 8,
-        direction: AdjustDirection.up,
-      );
-      expect(result[0], 'Offset: -90');
+      expect(result[0], 'Offset: 0');
     });
 
     test('throws NoNumberFound when no number is at cursor', () {
@@ -77,7 +66,7 @@ void main() {
       final result = numberAdjustInPlace(
         lines,
         row: 1,
-        column: 7,
+        column: 8, // Digit '0' in 'Value: 10'
         direction: AdjustDirection.up,
       );
       expect(result.length, 3);
